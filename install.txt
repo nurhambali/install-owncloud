@@ -1,0 +1,31 @@
+####Install Owncloud10####
+
+# install Epel wget  httpd2.4.25
+ yum install -y epel-release wget
+cd /etc/yum.repos.d && wget https://repo.codeit.guru/codeit.el`rpm -q --qf "%{VERSION}" $(rpm -q --whatprovides redhat-release)`.repo
+yum repolist
+yum install -y httpd-2.4.25-1.el7.codeit.x86_64 
+setsebool -P httpd_execmem=1
+systemctl start httpd
+systemctl enable httpd
+systemctl status httpd
+httpd -V
+
+# install php
+ yum -y install php php-mysql php-mcrypt php-curl php-gd php-xml php-dom php-mbstring
+ 
+# install mariadb
+ yum -y install mariadb-server 
+ systemctl start mariadb
+ systemctl enable mariadb
+ mysql_secure_installation 
+
+ # dwonload owncloud
+ cd opt/
+ wget https://download.owncloud.org/community/owncloud-10.0.0.tar.bz2
+ 
+ # ekstrak owncloud-10
+  rpm --import https://download.owncloud.org/download/repositories/stable/RHEL_7/repodata/repomd.xml.key
+  wget http://download.owncloud.org/download/repositories/stable/RHEL_7/ce:stable.repo -O /etc/yum.repos.d/ce:stable.repo
+  yum clean expire-cache
+  yum install owncloud
