@@ -19,13 +19,21 @@ httpd -V
  systemctl start mariadb
  systemctl enable mariadb
  mysql_secure_installation 
-
- # dwonload owncloud
- cd opt/
- wget https://download.owncloud.org/community/owncloud-10.0.0.tar.bz2
+# create database owncloud
+ mysql -u root -p
+ CREATE DATABASE owncloud;
+ GRANT ALL ON owncloud.* to 'owncloud'@'localhost' IDENTIFIED BY 'isipasswordnya disini';
+ FLUSH PRIVILEGES;
+ quit;
  
- # ekstrak owncloud-10
-  rpm --import https://download.owncloud.org/download/repositories/stable/RHEL_7/repodata/repomd.xml.key
-  wget http://download.owncloud.org/download/repositories/stable/RHEL_7/ce:stable.repo -O /etc/yum.repos.d/ce:stable.repo
-  yum clean expire-cache
-  yum install owncloud
+
+ # install owncloud-10
+ rpm --import https://download.owncloud.org/download/repositories/stable/RHEL_7/repodata/repomd.xml.key
+ wget http://download.owncloud.org/download/repositories/stable/RHEL_7/ce:stable.repo -O /etc/yum.repos.d/ce:stable.repo
+ yum clean expire-cache
+ yum -y install owncloud
+ 
+# Setting firewall
+firewall-cmd --add-service={http,https} --permanent
+firewall-cmd --reload
+ 
